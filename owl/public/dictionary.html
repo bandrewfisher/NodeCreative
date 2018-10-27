@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+    <style>
+        .container {
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body class="bg-info">
+
+    <div class="container bg-light mt-5 p-3">
+        <h2 class="text-center mb-5">Ultimate Utah City Finder and Word Definer</h2>
+        <div class="row">
+           
+
+                <form class="col-6">
+                    <div class="form-group">
+                        Enter a city to search for: <input type="text" id="citiesInput">
+                        <button class="btn btn-secondary" id="searchCities">Search</button>
+                        <ul id="citiesList"></ul>
+                    </div>
+                </form>
+                <form class="col-6">
+                    Enter some word to define: <input type="text" id="myDictionary" value="">
+                    <button class="btn btn-secondary" id="dictionaryButton">Search</button><br> Definition: <span id="result"></span>
+                </form>
+
+            
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            $("#dictionaryButton").click(function(event) {
+                event.preventDefault();
+                url = "dictionary?q=";
+                url += $("#myDictionary").val();
+                console.log(url);
+                $.getJSON(url, function(data) {
+                    var everything = "<ul>";
+                    $.each(data, function(i, item) {
+                        everything += "<li>" + data[i].defenition + "</li>";
+                    });
+                    everything += "</ul>";
+                    $("#result").html(everything);
+                });
+            });
+
+            $("#citiesInput").keyup(function(event) {
+                searchCities(event);
+            });
+
+            $("#searchCities").click(function(event) {
+                searchCities(event);
+            });
+            
+            $("#searchCities").click();
+        });
+
+        function searchCities(event) {
+            event.preventDefault();
+            url = "cities?q=";
+            url += $("#citiesInput").val();
+            $.getJSON(url, function(data) {
+                $("#citiesList").html("");
+                $.each(data, function(i, item) {
+                    var city = "<li>" + data[i].city + "</li>";
+                    $("#citiesList").append(city);
+                });
+
+
+            });
+        }
+    </script>
+
+
+</body>
+
+</html>
